@@ -1,0 +1,85 @@
+from random import randint, choice
+from PyQt4.Qt import *
+from PyQt4.QtGui import QWidget
+from soundmgr import SoundManager
+from imgmgr import ImageManager
+
+class Entity:
+    def __init__(self, game):
+        self.game = game
+        self.image = game.image.load_image('')
+        self.x = 0
+        self.y = 0
+
+    def update(self):
+        pass
+
+    def render(self, painter):
+        pass
+
+class Enemy(Entity):
+    def __init__(self, game):
+        Entity.__init__(self, game)
+
+    def update(self):
+        pass
+
+    def render(self, painter):
+        painter.drawImage(self.x, self.y, self.image)
+    
+
+class Map:
+    def __init__(self, game):
+        self.game = game
+        self.img = game.image.load_image('res/img/blank.png')
+
+    def render(self, painter):
+        painter.drawImage(0, 0, self.img)
+
+class Game(QWidget):
+    def __init__(self):
+        QWidget.__init__(self)
+        self.t = QTimer()
+        QObject.connect(self.t, SIGNAL('timeout()'), self, SLOT('repaint()'))
+        self.t.start(17)
+        self.setFixedSize(800, 600)
+
+        # Game Fields
+        self.running = False
+        self.image = ImageManager()
+        self.sound = SoundManager()
+        self.entities = []
+        self.world = Map(self)
+
+    def paintEvent(self, event):
+        if self.running:
+            self.update()
+            painter = QPainter(self)
+            painter.fillRect(0, 0, self.width(), self.height(), QColor(55, 55, 55))
+            self.render(painter)
+
+        else:
+            self.sound.stop()
+            self.close()
+
+    def keyPresseEvent(self, event):
+        key = event.key()
+
+    def keyReleaseEvent(self, event):
+        key = event.key()
+        
+        if key == Qt.Key_Escape:
+            self.running = False
+
+    def start(self):
+        self.running = True
+
+    def update(self):
+        self.sound.update()
+        
+        for entity in self.entities:
+            entity.update()
+
+    def render(self, painter):
+        self.world.render(painter)
+

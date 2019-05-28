@@ -8,6 +8,15 @@ Double click the `bin/run.bat` file to run.  Give it a second in order to load.
 
 This game should run on any platform that can run Python and PyQt4.
 
+### Controls
+
+* Move: `Arrow keys`
+* Fireball Small: `z`
+* Fireball Medium: `x`
+* Fireball Large: `c`
+* Sprint: `CTRL`
+* Reset: `Spacebar`
+
 
 
 <img src=misc/Screenshot1.png />
